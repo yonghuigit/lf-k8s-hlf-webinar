@@ -32,42 +32,40 @@ Table of Contents
 Before running this tutorial you will need:
 
 1) A Kubernetes (K8S) cluster on GCP - 4 nodes (Name: blockchain; Location type: Zonal; Zone: us-west1-a; Master version: 1.12.6-gke.10; Number of nodes: 4, Machine type: 2 vCPUs, 7.5 GB Memory)
-2) Have gcloud SDK and kubectl installed locally 
-	Set k8s context: gcloud container clusters get-credentials blockchain --zone us-west1-a --project yongssandbox
-3) Install Helm (Tiller) 
+2) Have gcloud SDK and kubectl installed locally (command line) and set K8S context: 
+	Click Connect for K8S cluster and get command line access. Execute locally to set K8S context
+3) Install Helm locally and Tiller on K8S: 
 	git clone https://github.com/yonghuigit/lf-k8s-hlf-webinar.git
-	   
-3) An `nginx-ingress` installation (using the Helm chart)
-4) A `cert-manager` installation (using the Helm chart)
-5) A domain name for your components (e.g. the Certificate Authority), connected to your `nginx-ingress` IP address - you can obtain one for free or $1.00 at many Domain Name Registrars.
+	cd lf-k8s-hlf-webinar
+	bash add_helm.sh
+4) Install K8S dashboard (optional):
+	kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+	kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
+	TOKEN=$(kubectl -n kube-system describe secret kubernetes-dashboard-token | awk '$1=="token:"{print $2}')
+	echo $TOKEN
+	kubectl proxy &
+5) Open browser to access K8S dashboard and log in with Token (from above, Optional))
+	http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+6) A domain name for your components (e.g. the Certificate Authority). You can obtain one for free or $1.00 at many Domain Name Registrars. Set it in ./helm_values/ca_values.yaml
 
 #### NGINX Ingress controller
 
-You can install the ingress controller by running this command:
+Install the ingress controller by running this command. Note this will create a load balancer in GCP for the ingress (K8S Service of type: LoadBalancer). Get the External endpoint IP and set it in DNS for the domain name above. Check with ping.
 
     helm install stable/nginx-ingress -n nginx-ingress --namespace ingress-controller
 
 #### Certificate manager
 
-You can install the certificate manager, to ensure you can auto-generate the TLS certificates
+Install the certificate manager, to ensure you can auto-generate the TLS certificates
 
-    helm install stable/cert-manager -n cert-manager --namespace cert-manager
+    helm install stable/cert-manager -n cert-manager --namespace cert-manager --version v0.5.2
 
 Then we need to add the Staging and Production cluster issuers
 
     kubectl create -f ./extra/certManagerCI_staging.yaml
 
     kubectl create -f ./extra/certManagerCI_production.yaml
-
-### Customisation
-
-#### Domain Name
-
-Currently, the `helm_values` files for the CA reference the following CA Domain Name: `ca.lf.aidtech-test.xyz` in  `/helm_values/ca_values.yaml`
-
-Since you won't have access to this, you should set this domain name to one you've obtained/purchased, and which is pointing to the `nginx-ingress` IP address.
-
-Alternatively, you may not use the Ingress at all and disable it, and instead use the CA through port-forwarding from the Kubernetes cluster to your local machine. For this you will need to adapt the instructions provided to your own use-case.
 
 ## Creating
 
@@ -147,9 +145,9 @@ Create a secret to hold the CA certificate:
 
 Create Genesis block and Channel
 
-    configtxgen -profile OrdererGenesis -outputBlock ./genesis.block
+    FABRIC_CFG_PATH=$PWD configtxgen -profile OrdererGenesis -outputBlock ./genesis.block
 
-    configtxgen -profile MyChannel -channelID mychannel -outputCreateChannelTx ./mychannel.tx
+    FABRIC_CFG_PATH=$PWD configtxgen -profile MyChannel -channelID mychannel -outputCreateChannelTx ./mychannel.tx
 
 Save them as secrets
 
