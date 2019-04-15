@@ -31,8 +31,12 @@ Table of Contents
 
 Before running this tutorial you will need:
 
-1) A Kubernetes (K8S) cluster (you can get free credits to deploy a managed K8S cluster on AWS, GCP, Azure, etc)
-2) Helm (and Tiller) installed on K8S
+1) A Kubernetes (K8S) cluster on GCP - 4 nodes (Name: blockchain; Location type: Zonal; Zone: us-west1-a; Master version: 1.12.6-gke.10; Number of nodes: 4, Machine type: 2 vCPUs, 7.5 GB Memory)
+2) Have gcloud SDK and kubectl installed locally 
+	Set k8s context: gcloud container clusters get-credentials blockchain --zone us-west1-a --project yongssandbox
+3) Install Helm (Tiller) 
+	git clone https://github.com/yonghuigit/lf-k8s-hlf-webinar.git
+	   
 3) An `nginx-ingress` installation (using the Helm chart)
 4) A `cert-manager` installation (using the Helm chart)
 5) A domain name for your components (e.g. the Certificate Authority), connected to your `nginx-ingress` IP address - you can obtain one for free or $1.00 at many Domain Name Registrars.
