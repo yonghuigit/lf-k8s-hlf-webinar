@@ -1,5 +1,5 @@
 image:
-  tag: 1.2.0
+  tag: 1.4.0
 
 ingress:
   enabled: true
@@ -9,12 +9,12 @@ ingress:
   path: /
   hosts:
     # TODO: Change this back
-    - ca.lf.aidtech-test.xyz
+    - www.getsafefood.com 
   tls:
     - secretName: ca--tls
       hosts:
         # TODO: Change this back
-        - ca.lf.aidtech-test.xyz
+        - www.getsafefood.com 
 
 persistence:
   accessMode: ReadWriteOnce
@@ -26,16 +26,16 @@ postgresql:
   enabled: true
 
 config:
-  hlfToolsVersion: 1.2.0
+  hlfToolsVersion: 1.4.0
   csr:
     names:
-      c: IE
-      st: Dublin
+      c: US 
+      st: California 
       l:
-      o: "AID:Tech"
+      o: "iTradeNetwork"
       ou: Blockchain
   affiliations:
-    aidtech: []
+    iTradeNetwork: []
 
 affinity:
   podAntiAffinity:

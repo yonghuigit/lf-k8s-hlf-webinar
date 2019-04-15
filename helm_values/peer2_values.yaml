@@ -1,14 +1,14 @@
 image:
-  tag: 1.2.0
+  tag: 1.4.0
 
 persistence:
   accessMode: ReadWriteOnce
-  size: 1Gi
+  size: 10Gi
 
 peer:
   databaseType: CouchDB
   couchdbInstance: cdb-peer2
-  mspID: AidTechMSP
+  mspID: iTradeMSP
 
 secrets:
   peer:

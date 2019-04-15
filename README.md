@@ -95,7 +95,7 @@ Check that ingress works correctly
 
     curl https://$CA_INGRESS/cainfo
 
-    FABRIC_CA_CLIENT_HOME=./config fabric-ca-client getcacert -u https://$CA_INGRESS -M ./AidTechMSP
+    FABRIC_CA_CLIENT_HOME=./config fabric-ca-client getcacert -u https://$CA_INGRESS -M ./iTradeMSP
 
 #### Identities
 
@@ -111,29 +111,29 @@ Register Organisation admin if the previous command did not work
 
 Enroll the Organisation Admin identity (typically we would use a more secure password than `OrgAdm1nPW`, etc.)
 
-    FABRIC_CA_CLIENT_HOME=./config fabric-ca-client enroll -u https://org-admin:OrgAdm1nPW@$CA_INGRESS -M ./AidTechMSP
+    FABRIC_CA_CLIENT_HOME=./config fabric-ca-client enroll -u https://org-admin:OrgAdm1nPW@$CA_INGRESS -M ./iTradeMSP
 
 Copy the signcerts to admincerts
 
-    mkdir -p ./config/AidTechMSP/admincerts
+    mkdir -p ./config/iTradeMSP/admincerts
 
-    cp ./config/AidTechMSP/signcerts/* ./config/AidTechMSP/admincerts
+    cp ./config/iTradeMSP/signcerts/* ./config/iTradeMSP/admincerts
 
 Create a secret to hold the admincert
 
-    ORG_CERT=$(ls ./config/AidTechMSP/admincerts/cert.pem)
+    ORG_CERT=$(ls ./config/iTradeMSP/admincerts/cert.pem)
 
     kubectl create secret generic -n blockchain hlf--org-admincert --from-file=cert.pem=$ORG_CERT
 
 Find the adminkey and create a secret to hold it
 
-    ORG_KEY=$(ls ./config/AidTechMSP/keystore/*_sk)
+    ORG_KEY=$(ls ./config/iTradeMSP/keystore/*_sk)
 
     kubectl create secret generic -n blockchain hlf--org-adminkey --from-file=key.pem=$ORG_KEY
 
 Create a secret to hold the CA certificate:
 
-    CA_CERT=$(ls ./config/AidTechMSP/cacerts/*.pem)
+    CA_CERT=$(ls ./config/iTradeMSP/cacerts/*.pem)
 
     kubectl create secret generic -n blockchain hlf--ca-cert --from-file=cacert.pem=$CA_CERT
 

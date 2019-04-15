@@ -1,5 +1,5 @@
 image:
-  tag: 1.2.0
+  tag: 1.4.0
 
 persistence:
   accessMode: ReadWriteOnce
@@ -8,7 +8,7 @@ persistence:
 ord:
   type: kafka
   ## MSP ID of the Orderer
-  mspID: AidTechMSP
+  mspID: iTradeMSP
 
 secrets:
   ord:

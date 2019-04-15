@@ -1,8 +1,8 @@
 image:
-  tag: 0.4.10
+  tag: 0.4.15
 
 persistence:
-  size: 1Gi
+  size: 10Gi
 
 affinity:
   podAntiAffinity:

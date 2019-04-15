@@ -14,13 +14,13 @@
 Organizations:
 
     # Organization controlling both peers and Orderers
-    - &AidTech
-        Name: AidTech
+    - &iTrade
+        Name: iTrade
 
         # ID to load the MSP definition as
-        ID: AidTechMSP
+        ID: iTradeMSP
 
-        MSPDir: ./AidTechMSP
+        MSPDir: ./iTradeMSP
 
         # turn off security for the peer
         AdminPrincipal: Role.MEMBER
@@ -109,14 +109,14 @@ Profiles:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
-                - *AidTech
+                - *iTrade
         Consortiums:
             MyConsortium:
                 Organizations:
-                    - *AidTech
+                    - *iTrade
     MyChannel:
         Consortium: MyConsortium
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *AidTech
+                - *iTrade
