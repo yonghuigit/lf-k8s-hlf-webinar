@@ -36,14 +36,15 @@ Before running this tutorial you will need:
 	Click Connect for K8S cluster and get command line access. Execute locally to set K8S context
 3) Install Helm locally and Tiller on K8S: 
 
-	git clone https://github.com/yonghuigit/lf-k8s-hlf-webinar.git
+	```git clone https://github.com/yonghuigit/lf-k8s-hlf-webinar.git
 
 	cd lf-k8s-hlf-webinar
 
-	bash add_helm.sh
+	bash add_helm.sh```
+	
 4) Install K8S dashboard (optional):
 
-	kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+	```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
 
 	kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
 
@@ -51,7 +52,7 @@ Before running this tutorial you will need:
 
 	echo $TOKEN
 
-	kubectl proxy &
+	kubectl proxy &```
 
 5) Open browser to access K8S dashboard and log in with Token (from above, Optional))
 
