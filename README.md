@@ -35,16 +35,26 @@ Before running this tutorial you will need:
 2) Have gcloud SDK and kubectl installed locally (command line) and set K8S context: 
 	Click Connect for K8S cluster and get command line access. Execute locally to set K8S context
 3) Install Helm locally and Tiller on K8S: 
+
 	git clone https://github.com/yonghuigit/lf-k8s-hlf-webinar.git
+
 	cd lf-k8s-hlf-webinar
+
 	bash add_helm.sh
 4) Install K8S dashboard (optional):
+
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+
 	kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
+
 	TOKEN=$(kubectl -n kube-system describe secret kubernetes-dashboard-token | awk '$1=="token:"{print $2}')
+
 	echo $TOKEN
+
 	kubectl proxy &
+
 5) Open browser to access K8S dashboard and log in with Token (from above, Optional))
+
 	http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
 
 6) A domain name for your components (e.g. the Certificate Authority). You can obtain one for free or $1.00 at many Domain Name Registrars. Set it in ./helm_values/ca_values.yaml
