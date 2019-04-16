@@ -11,6 +11,7 @@ echo "initialize helm"
 # initialized helm within the tiller service account
 helm init --service-account tiller --history-max 200
 # updates the repos for Helm repo integration
+helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
 helm repo update
 
 echo "verify helm"
