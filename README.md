@@ -1,20 +1,17 @@
 Table of Contents
 =================
 
-   * [Webinar deployment](#webinar-deployment)
+   * [GCP Deployment](#webinar-deployment)
       * [Before starting](#before-starting)
          * [Pre-requisites](#pre-requisites)
-            * [NGINX Ingress controller](#nginx-ingress-controller)
-            * [Certificate manager](#certificate-manager)
-         * [Customisation](#customisation)
-            * [Domain Name](#domain-name)
-            * [Storage](#storage)
+         * [NGINX Ingress controller](#nginx-ingress-controller)
+		 * [Certificate manager](#certificate-manager)
       * [Creating](#creating)
          * [Fabric CA](#fabric-ca)
-         * [Crypto material](#crypto-material)
+         * [Crypto materials](#crypto-material)
          * [Kafka for Ordering service](#kafka-for-ordering-service)
-         * [Fabric Orderer](#fabric-orderer)
-         * [Fabric Peer](#fabric-peer)
+         * [Fabric Orderers](#fabric-orderer)
+         * [Fabric Peers](#fabric-peer)
       * [Deleting](#deleting)
       * [Extra resources](#extra-resources)
          * [Repositories](#repositories)
@@ -23,7 +20,7 @@ Table of Contents
 
 # Webinar deployment
 
-> Important note! The content of these instructions has changed since the webinar, following improvements in the hlf-ca, hlf-ord and hlf-peer charts. You also may wish to look at the newer https://github.com/aidtechnology/hgf-k8s-workshop repository and/or try your hands at https://github.com/aidtechnology/nephos, which helps automate the deployment process.
+> Original note: The content of these instructions has changed since the webinar, following improvements in the hlf-ca, hlf-ord and hlf-peer charts. You also may wish to look at the newer https://github.com/aidtechnology/hgf-k8s-workshop repository and/or try your hands at https://github.com/aidtechnology/nephos, which helps automate the deployment process.
 
 ## Before starting
 
@@ -110,23 +107,23 @@ Check that ingress works correctly
 
     CA_INGRESS=$(kubectl get ingress -n blockchain -l "app=hlf-ca,release=ca" -o jsonpath="{.items[0].spec.rules[0].host}")
 
-    curl https://$CA_INGRESS/cainfo
+    curl -v https://$CA_INGRESS/cainfo
 
     FABRIC_CA_CLIENT_HOME=./config fabric-ca-client getcacert -u https://$CA_INGRESS -M ./iTradeMSP
 
 #### Identities
 
-##### Organisation admin
+##### Organization admin
 
 Get identity of org-admin (this should not exist at first)
 
     kubectl exec -n blockchain $CA_POD -- fabric-ca-client identity list --id org-admin
 
-Register Organisation admin if the previous command did not work
+Register Organization admin if the previous command did not work
 
     kubectl exec -n blockchain $CA_POD -- fabric-ca-client register --id.name org-admin --id.secret OrgAdm1nPW --id.attrs 'admin=true:ecert'
 
-Enroll the Organisation Admin identity (typically we would use a more secure password than `OrgAdm1nPW`, etc.)
+Enroll the Organization Admin identity (typically we would use a more secure password than `OrgAdm1nPW`, etc.)
 
     FABRIC_CA_CLIENT_HOME=./config fabric-ca-client enroll -u https://org-admin:OrgAdm1nPW@$CA_INGRESS -M ./iTradeMSP
 
