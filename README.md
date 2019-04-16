@@ -215,6 +215,8 @@ Get logs from orderer to check it's actually started
     ORD_POD=$(kubectl get pods -n blockchain -l "app=hlf-ord,release=ord${NUM}" -o jsonpath="{.items[0].metadata.name}")
 
     kubectl logs -n blockchain $ORD_POD | grep 'completeInitialization'
+    
+    export NUM=2
 
 > Repeat all above steps for Orderer 2, etc.
 
@@ -263,12 +265,18 @@ Check that Peer is running
     PEER_POD=$(kubectl get pods -n blockchain -l "app=hlf-peer,release=peer${NUM}" -o jsonpath="{.items[0].metadata.name}")
 
     kubectl logs -n blockchain $PEER_POD | grep 'Starting peer'
+    
+    export NUM=2
 
 > Repeat all above steps for Peer 2, etc.
 
 #### Channels
 
 Create channel (do this only once in Peer 1)
+
+    export NUM=1
+    
+    PEER_POD=$(kubectl get pods -n blockchain -l "app=hlf-peer,release=peer${NUM}" -o jsonpath="{.items[0].metadata.name}")
 
     kubectl exec -n blockchain $PEER_POD -- peer channel create -o ord1-hlf-ord.blockchain.svc.cluster.local:7050 -c mychannel -f /hl_config/channel/mychannel.tx
 
@@ -277,6 +285,10 @@ Fetch and join channel
     kubectl exec -n blockchain $PEER_POD -- peer channel fetch config /var/hyperledger/mychannel.block -c mychannel -o ord1-hlf-ord.blockchain.svc.cluster.local:7050
 
     kubectl exec -n blockchain $PEER_POD -- bash -c 'CORE_PEER_MSPCONFIGPATH=$ADMIN_MSP_PATH peer channel join -b /var/hyperledger/mychannel.block'
+    
+    export NUM=2
+    
+    PEER_POD=$(kubectl get pods -n blockchain -l "app=hlf-peer,release=peer${NUM}" -o jsonpath="{.items[0].metadata.name}")
 
 > Repeat above 2 commands (`fetch` & `join`) for Peer 2, etc.
 
